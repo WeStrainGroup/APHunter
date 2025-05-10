@@ -1,0 +1,56 @@
+package:
+  name: aphunter
+  version: 1.0.1
+
+source:
+  path: .
+
+build:
+  number: 0
+  script:
+    - mkdir -p "$PREFIX/bin"
+    - cp main.py "$PREFIX/bin/aphunter"
+    - chmod +x "$PREFIX/bin/aphunter"
+
+    - DB_SHARE_DIR="$PREFIX/share/$PKG_NAME/blastdb"
+    - mkdir -p "$DB_SHARE_DIR"
+    - cp -r blast_db/its_primer_db/* "$DB_SHARE_DIR/"
+
+    - |
+      ACTIVATE_DIR="$PREFIX/etc/conda/activate.d"
+      DEACTIVATE_DIR="$PREFIX/etc/conda/deactivate.d"
+      mkdir -p "$ACTIVATE_DIR"
+      mkdir -p "$DEACTIVATE_DIR"
+
+      APHUNTER_BLASTDB_DIR_VAR="APHUNTER_BLASTDB_DIR"
+      APHUNTER_BLASTDB_DIR_VALUE="$DB_SHARE_DIR"
+      APHUNTER_BLASTDB_NAME_VAR="APHUNTER_BLASTDB_NAME"
+      APHUNTER_BLASTDB_NAME_VALUE="its_primer_db"
+
+      echo "export ${APHUNTER_BLASTDB_DIR_VAR}=\"${APHUNTER_BLASTDB_DIR_VALUE}\"" > "${ACTIVATE_DIR}/${PKG_NAME}-blastdb-vars.sh"
+      echo "export ${APHUNTER_BLASTDB_NAME_VAR}=\"${APHUNTER_BLASTDB_NAME_VALUE}\"" >> "${ACTIVATE_DIR}/${PKG_NAME}-blastdb-vars.sh"
+
+      echo "unset ${APHUNTER_BLASTDB_DIR_VAR}" > "${DEACTIVATE_DIR}/${PKG_NAME}-blastdb-vars.sh"
+      echo "unset ${APHUNTER_BLASTDB_NAME_VAR}" >> "${DEACTIVATE_DIR}/${PKG_NAME}-blastdb-vars.sh"
+
+requirements:
+  host:
+    - python
+
+  run:
+    - python >=3.8
+    - pandas
+    - matplotlib-base
+    - bioconda::seqkit
+    - bioconda::vsearch
+    - bioconda::blast
+
+channel_sources:
+  - conda-forge
+  - bioconda
+  - defaults
+
+about:
+  home: https://github.com/WeStrainGroup/APHunter
+  license: MIT
+  summary: 'Find your Amplicon Primer with APHunter'
