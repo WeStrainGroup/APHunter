@@ -1,6 +1,6 @@
 package:
   name: aphunter
-  version: 1.1.0
+  version: 1.1.1
 
 source:
   path: .
@@ -25,7 +25,7 @@ build:
       APHUNTER_BLASTDB_DIR_VAR="APHUNTER_BLASTDB_DIR"
       APHUNTER_BLASTDB_DIR_VALUE="$DB_SHARE_DIR"
       APHUNTER_BLASTDB_NAME_VAR="APHUNTER_BLASTDB_NAME"
-      APHUNTER_BLASTDB_NAME_VALUE="its_primer_db"
+      APHUNTER_BLASTDB_NAME_VALUE="its_primers"
 
       echo "export ${APHUNTER_BLASTDB_DIR_VAR}=\"${APHUNTER_BLASTDB_DIR_VALUE}\"" > "${ACTIVATE_DIR}/${PKG_NAME}-blastdb-vars.sh"
       echo "export ${APHUNTER_BLASTDB_NAME_VAR}=\"${APHUNTER_BLASTDB_NAME_VALUE}\"" >> "${ACTIVATE_DIR}/${PKG_NAME}-blastdb-vars.sh"
