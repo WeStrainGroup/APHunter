@@ -14,7 +14,7 @@ build:
 
     - DB_SHARE_DIR="$PREFIX/share/$PKG_NAME/blastdb"
     - mkdir -p "$DB_SHARE_DIR"
-    - cp -r blast_db/* "$DB_SHARE_DIR/"
+    - cp -r blast_db/its_primer_db/* "$DB_SHARE_DIR/"
 
     - |
       ACTIVATE_DIR="$PREFIX/etc/conda/activate.d"
