@@ -613,7 +613,11 @@ def run_blast_pipeline(entity_consensus_results, blast_input_fasta_name, blast_d
                 if col_name not in final_df.columns:
                     final_df[col_name] = pd.NA 
         
-        final_df.fillna("N/A", inplace=True)
+        for col in final_df.columns:
+            if final_df[col].dtype == "object" or pd.api.types.is_string_dtype(final_df[col]):
+                final_df[col] = final_df[col].fillna("N/A")
+            else:
+                pass
 
         desired_column_order = ['query_id', 'query_reads_count']
         for mapped_col in csv_column_names:
