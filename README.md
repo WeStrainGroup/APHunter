@@ -182,9 +182,9 @@ For questions, suggestions, or bug reports, please contact us via email:
 We greatly appreciate your feedback and contributions!
 
 ## Future Updates
-We plan the following enhancements for APHunter (based on current version 1.0.1):
-1.  **Improved Log Output (Target: v1.0.2):** More structured and informative logging.
-2.  **BLAST Result Prioritization (Target: v1.1.0):** Enhanced analysis of BLAST results to provide a ranked recommendation of the "top suspect" primer(s).
-3.  **User-Supplied BLAST Database (Target: v1.2.0):** Functionality to allow users to provide their own custom primer databases for BLAST.
+We plan the following enhancements for APHunter (based on current version 1.1.0):
+1.  **Improved Log Output (Target: v1.1.1):** More structured and informative logging.
+2.  **BLAST Result Prioritization (Target: v1.2.0):** Enhanced analysis of BLAST results to provide a ranked recommendation of the "top suspect" primer(s).
+3.  **User-Supplied BLAST Database (Target: v1.3.0):** Functionality to allow users to provide their own custom primer databases for BLAST.
 
 If you have ideas regarding these or other potential features, please do not hesitate to [contact us](#contact).
