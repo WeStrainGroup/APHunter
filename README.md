@@ -125,16 +125,21 @@ These groups were identified by an all-versus-all BLAST search within the ITS pr
 
 **NOTE:** Primers are grouped if any primer in the group shares sufficient similarity with at least one other member of the same group. This means not all pairs within a group are necessarily highly similar to each other directly, but they are connected through a chain of similarity.
 
-*   ITS1_1_fwd - ITS1ngs_1_fwd - ITS1Fngs_1_fwd - ITS1F_1_fwd - ITSOF-T_1_fwd - ITS1F_KYO1_1_fwd
-*   58A1F_2_fwd - 58A2F_2_fwd - ITS3_2_fwd - 58A2R_1_rev - ITS2_1_rev
-*   fITS7_2_fwd - gITS7_2_fwd - ITS86F_2_fwd - fITS7r_1_rev
-*   ITS4_2_rev - ITS4-Fun_2_rev - ITS4ngs_2_rev
-*   ITS9mun_1_fwd - ITS9MUNngs_1_fwd
-*   ITS4_KYO2_2_rev - ITS4-Tul2_2_rev
-*   ITS1-F_KYO2_1_fwd - ITS5_1_fwd
-*   ITS4-Clav_2_rev - LR0B_2_rev
+*   58A1F_2_fwd - 58A2F_2_fwd - ITS3_2_fwd
+*   58A2R_1_rev - ITS2_1_rev
 *   BITS_1_fwd - ITS1catta_1_fwd
-*   ITS4B1_2_rev - ITS4B_2_rev
+*   fITS7_2_fwd - gITS7_2_fwd - ITS86F_2_fwd
+*   ITS1_1_fwd - ITS1ngs_1_fwd
+*   ITSF_1_fwd - ITS1F_KYO1_1_fwd - ITSFngs_1_fwd - ITSOF_1_fwd
+*   ITS1F_KYO2_1_fwd - ITS5_1_fwd
+*   ITS2_1_rev - 58A2R_1_rev
+*   ITS4_2_rev - ITS4ngs_2_rev - ITS4-Fun_2_rev
+*   ITS4_KYO2_2_rev - ITS4-Tul2_2_rev
+*   ITS4-Clav_2_rev - LR0B_2_rev
+*   ITS4B_2_rev - ITS4B1_2_rev
+*   ITS4PL_2_rev - LR21-Ath_2_rev
+*   ITS9mun_1_fwd - ITS9MUNngs_1_fwd
+*   LR21_2_rev - NL6Bmun_2_rev
 *   LR3_2_rev - TW13_2_rev
 
 **Reminder:** When interpreting the results, there are four main senarios. You may refer to the following table to quickly identify the corresponding type of primer possibly used in your dataset:
@@ -182,8 +187,8 @@ For questions, suggestions, or bug reports, please contact us via email:
 We greatly appreciate your feedback and contributions!
 
 ## Future Updates
-We plan the following enhancements for APHunter (based on current version 1.1.1):
-1.  **Improved Log Output (Target: v1.1.2):** More structured and informative logging.
+We plan the following enhancements for APHunter (based on current version 1.1.2):
+1.  **Improved Log Output (Target: v1.1.3):** More structured and informative logging.
 2.  **BLAST Result Prioritization (Target: v1.2.0):** Enhanced analysis of BLAST results to provide a ranked recommendation of the "top suspect" primer(s).
 3.  **User-Supplied BLAST Database (Target: v1.3.0):** Functionality to allow users to provide their own custom primer databases for BLAST.
 

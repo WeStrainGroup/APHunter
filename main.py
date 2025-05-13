@@ -9,6 +9,8 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from concurrent.futures import ProcessPoolExecutor, as_completed
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 import multiprocessing
 import time
 import datetime
@@ -556,7 +558,7 @@ def run_blast_pipeline(entity_consensus_results, blast_input_fasta_name, blast_d
     max_len = max(len(s) for _, s in entity_consensus_results) if entity_consensus_results else 0
     task = "blastn-short" if 0 < max_len < 50 else "blastn"
     cmd = (f"blastn -query '{blast_input_fasta_path}' -db '{blast_db_path}' -out '{blast_output_tsv_path}' "
-           f"-outfmt \"{blast_outfmt_param}\" -evalue {blast_evalue_param} -task {task} -num_threads {num_threads_param}")
+           f"-outfmt \"{blast_outfmt_param}\" -evalue {blast_evalue_param} -task {task} -num_threads {num_threads_param} -strand plus ")
     
     result = run_command(cmd, log_file_path)
     if result is None or result.returncode != 0:
@@ -583,7 +585,7 @@ def run_blast_pipeline(entity_consensus_results, blast_input_fasta_name, blast_d
             
     all_queries_df = pd.DataFrame(all_submitted_queries_data)
 
-    best_hits_from_blast_df = pd.DataFrame() 
+    hits_from_blast_df = pd.DataFrame() 
     blast_field_names_from_outfmt = blast_outfmt_param.split(" ")[1:] 
     csv_column_names = [BLAST_HEADER_MAP.get(h, h) for h in blast_field_names_from_outfmt]
 
@@ -595,18 +597,18 @@ def run_blast_pipeline(entity_consensus_results, blast_input_fasta_name, blast_d
                     df_raw_blast['bit_score'] = pd.to_numeric(df_raw_blast['bit_score'], errors='coerce')
                     df_raw_blast.dropna(subset=['bit_score'], inplace=True)
                     if not df_raw_blast.empty:
-                        best_hits_from_blast_df = df_raw_blast.sort_values(
+                        hits_from_blast_df = df_raw_blast.sort_values(
                             ["query_id", "bit_score"], ascending=[True, False]
-                        ).drop_duplicates("query_id", keep="first")
+                        )
                 else:
                     missing_cols = [col for col in ['bit_score', 'query_id'] if col not in df_raw_blast.columns]
-                    log(f"Warning (BLAST): Key column(s) {missing_cols} not found in raw BLAST output. Cannot determine best hits.", log_file_path)
+                    log(f"Warning (BLAST): Key column(s) {missing_cols} not found in raw BLAST output. Cannot process hits.", log_file_path)
         except Exception as e:
             log(f"Error (BLAST): Failed to process raw BLAST output {os.path.basename(blast_output_tsv_path)}: {e}", log_file_path)
 
     if not all_queries_df.empty:
-        if not best_hits_from_blast_df.empty:
-            final_df = pd.merge(all_queries_df, best_hits_from_blast_df, on="query_id", how="left")
+        if not hits_from_blast_df.empty:
+            final_df = pd.merge(all_queries_df, hits_from_blast_df, on="query_id", how="left")
         else: 
             final_df = all_queries_df.copy()
             for col_name in csv_column_names:
@@ -614,10 +616,7 @@ def run_blast_pipeline(entity_consensus_results, blast_input_fasta_name, blast_d
                     final_df[col_name] = pd.NA 
         
         for col in final_df.columns:
-            if final_df[col].dtype == "object" or pd.api.types.is_string_dtype(final_df[col]):
-                final_df[col] = final_df[col].fillna("N/A")
-            else:
-                pass
+            final_df[col] = final_df[col].astype("object").fillna("N/A").infer_objects(copy=False)
 
         desired_column_order = ['query_id', 'query_reads_count']
         for mapped_col in csv_column_names:
@@ -631,7 +630,7 @@ def run_blast_pipeline(entity_consensus_results, blast_input_fasta_name, blast_d
 
         try:
             final_df.to_csv(best_hits_csv_path, index=False)
-            log(f"BLAST: Final report for {len(final_df)} queries saved: {os.path.basename(best_hits_csv_path)}", log_file_path)
+            log(f"BLAST: Final report for {len(final_df)} query-hit pairs saved: {os.path.basename(best_hits_csv_path)}", log_file_path)
             processed_successfully = True
         except Exception as e:
             log(f"Error (BLAST): Failed to save final BLAST report to {os.path.basename(best_hits_csv_path)}: {e}", log_file_path)
@@ -817,8 +816,8 @@ def main():
                     log(f"Warning: 'query_reads_count' column NOT found in {os.path.basename(final_blast_output_csv)} header.", log_file)
             
             with open(final_blast_output_csv, 'r') as f_blast_csv_count:
-                num_total_entries = max(0, sum(1 for _ in f_blast_csv_count) -1)
-            log(f"Final BLAST Report Entries (incl. non-hits): {num_total_entries} (in {os.path.basename(final_blast_output_csv)})", log_file)
+                num_total_entries = max(0, sum(1 for _ in f_blast_csv_count) -1) # -1 for header
+            log(f"Final BLAST Report Entries (query-hit pairs): {num_total_entries} (in {os.path.basename(final_blast_output_csv)})", log_file)
         except Exception as e_count:
             log(f"Final BLAST Report: {os.path.basename(final_blast_output_csv)} (exists, but count/header check failed: {e_count})", log_file)
     elif entity_consensus_results:
