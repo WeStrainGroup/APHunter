@@ -100,7 +100,6 @@ ITS subject IDs include the target region and direction. In suffixes such as `_1
 | Consideration | Per-sample | Pooled |
 | ------------- | ---------- | ------ |
 | Analysis unit | Individual sample | Read cluster across all samples |
-| Extra processing | No global clustering | Pooling and global clustering |
 | Best suited for | Sample-level tracing and contamination checks | Batch-level detection of one or more primer signals |
 
 Runtime depends on the number of files, total reads, and sequence diversity; pooled mode adds a global clustering step.
