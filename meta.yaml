@@ -1,17 +1,24 @@
 package:
   name: aphunter
-  version: 1.1.2
+  version: 2.0.0
 
 source:
   path: .
 
 build:
-  number: 0
+  number: 1
   script:
     - mkdir -p "$PREFIX/bin"
     - cp main.py "$PREFIX/bin/aphunter"
     - chmod +x "$PREFIX/bin/aphunter"
 
+    # Runtime data expected beside the executable (see _project_root_dir() in main.py).
+    - mkdir -p "$PREFIX/bin/blast_db/its_primer_db"
+    - mkdir -p "$PREFIX/bin/blast_db/16s_primer_db"
+    - cp -r blast_db/its_primer_db/* "$PREFIX/bin/blast_db/its_primer_db/"
+    - cp -r blast_db/16s_primer_db/* "$PREFIX/bin/blast_db/16s_primer_db/"
+
+    # Legacy share path + env vars (default DB when --blast-db is not passed).
     - DB_SHARE_DIR="$PREFIX/share/$PKG_NAME/blastdb"
     - mkdir -p "$DB_SHARE_DIR"
     - cp -r blast_db/its_primer_db/* "$DB_SHARE_DIR/"
@@ -52,5 +59,11 @@ channel_sources:
 
 about:
   home: https://github.com/WeStrainGroup/APHunter
-  license: MIT
-  summary: 'Find your Amplicon Primer with APHunter'
+  license: CC BY-NC-SA 4.0
+  license_file: LICENSE
+  summary: Identify amplicon primers from sequencing reads (APHunter v2.0.0)
+  description: |
+    APHunter determines which primer sequences from a reference library best
+    explain the conserved 5-prime end of amplicon reads. Supports per-sample
+    and pooled clustering modes, ITS and 16S built-in BLAST databases, and
+    orientation-aware primer calling.

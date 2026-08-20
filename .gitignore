@@ -1,2 +1,26 @@
-# MacOS hidden files
+# Operating-system metadata
 .DS_Store
+Thumbs.db
+Desktop.ini
+
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Packaging and editor artifacts
+build/
+dist/
+*.egg-info/
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Runtime outputs
+*.log
+nohup.out
